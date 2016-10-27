@@ -17,10 +17,13 @@ public class CheatActivity extends AppCompatActivity {
     private static final String EXTRA_ANSWER_SHOWN =
             CheatActivity.class.getPackage().getName() + ".answer_shown";
 
+    private static final String KEY_ANSWER_SHOWN = "answer_shown";
+
     private TextView mAnswerTextView;
     private Button mShowAnswer;
 
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswerShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +38,23 @@ public class CheatActivity extends AppCompatActivity {
         mShowAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int answerRes = R.string.false_button;
-                if (mAnswerIsTrue) {
-                    answerRes = R.string.true_button;
-                }
-                mAnswerTextView.setText(answerRes);
-                setAnswerShownResult(true);
+                showAnswer();
             }
         });
+
+        if (savedInstanceState != null) {
+            mIsAnswerShown = savedInstanceState.getBoolean(KEY_ANSWER_SHOWN, false);
+            if (mIsAnswerShown) {
+                showAnswer();
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(KEY_ANSWER_SHOWN, mIsAnswerShown);
     }
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
@@ -55,5 +67,15 @@ public class CheatActivity extends AppCompatActivity {
 
     private void setAnswerShownResult(boolean isAnswerShown) {
         setResult(RESULT_OK, new Intent().putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown));
+    }
+
+    private void showAnswer() {
+        int answerRes = R.string.false_button;
+        if (mAnswerIsTrue) {
+            answerRes = R.string.true_button;
+        }
+        mAnswerTextView.setText(answerRes);
+        mIsAnswerShown = true;
+        setAnswerShownResult(mIsAnswerShown);
     }
 }

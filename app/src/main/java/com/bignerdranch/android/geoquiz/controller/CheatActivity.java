@@ -20,8 +20,10 @@ public class CheatActivity extends AppCompatActivity {
             CheatActivity.class.getPackage().getName() + ".answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN =
             CheatActivity.class.getPackage().getName() + ".answer_shown";
+    private static final String DEVICE_API_LEVEL = "API Level " + Build.VERSION.SDK_INT;
 
     private TextView mAnswerTextView;
+    private TextView mApiLevelTextView;
     private Button mShowAnswer;
 
     private boolean mAnswerIsTrue;
@@ -68,6 +70,9 @@ public class CheatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mApiLevelTextView = (TextView) findViewById(R.id.api_level_text_view);
+        mApiLevelTextView.setText(DEVICE_API_LEVEL);
     }
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
